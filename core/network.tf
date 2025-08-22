@@ -43,7 +43,7 @@ resource "aws_security_group" "bastion_sg" {
   dynamic "ingress" {
     for_each = var.create_gateway ? [1] : []
     content {
-      description = "SSH from your IP"
+      description = "SSH"
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
@@ -58,7 +58,7 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = [var.vpc_cidr]
   }
   ingress {
-    description = "HTTP proxy from VPC to bastion"
+    description = "HTTP proxy VPC to bastion"
     from_port   = 3128
     to_port     = 3128
     protocol    = "tcp"
