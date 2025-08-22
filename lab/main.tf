@@ -1,5 +1,9 @@
 locals {
-  size_map = { small = "t3.micro", medium = "t3.small", large = "t3.medium" }
+  size_map = { 
+    small = "t3.micro", 
+    medium = "t3.small", 
+    large = "t3.medium" 
+  }
   ami_param = (
     var.distro == "ubuntu22"
     ? "/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id"
