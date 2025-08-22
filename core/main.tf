@@ -10,7 +10,7 @@ resource "tls_private_key" "ssh" {
 resource "aws_key_pair" "core" {
   key_name   = "scep-lab-key"
   public_key = tls_private_key.ssh.public_key_openssh
-  tags       = merge(var.tags, { Name = "scep-lab-key" })
+  tags       = merge(var.tags, { Name = "key-lab" })
 }
 
 resource "local_sensitive_file" "pem" {
