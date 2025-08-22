@@ -4,8 +4,6 @@ set -euxo pipefail
 # Amazon Linux 2
 yum -y install squid
 
-# Définir ACL "vpc" et autoriser avant le deny all
-# (on insère proprement avant 'http_access deny all')
 if ! grep -q '^acl vpc ' /etc/squid/squid.conf; then
   sed -i '1i acl vpc src ${var.vpc_cidr}' /etc/squid/squid.conf
 fi
