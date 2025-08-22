@@ -5,7 +5,7 @@ resource "aws_vpc" "main" {
   tags = merge(var.tags, { Name = "scep-core-vpc" })
 }
 
-resource "aws_internet_gateway" "igw" {
+resource "aws_internet_gateway" "gateway" {
   count  = var.create_gateway ? 1 : 0
   vpc_id = aws_vpc.main.id
   tags   = merge(var.tags, { Name = "scep-core-igw" })
@@ -27,7 +27,7 @@ resource "aws_route" "bastion_default" {
   count                  = var.create_gateway ? 1 : 0
   route_table_id         = aws_route_table.bastion.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw[0].id
+  gateway_id             = aws_internet_gateway.gateway[0].id
 }
 
 resource "aws_route_table_association" "bastion" {

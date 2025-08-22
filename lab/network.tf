@@ -11,7 +11,7 @@ resource "aws_security_group" "lab_sg" {
   vpc_id      = var.vpc_id
 
   ingress {
-    description     = "SSH from bastion SG"
+    description     = "SSH bastion SG"
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
