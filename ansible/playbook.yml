@@ -1,0 +1,36 @@
+---
+- name: Base setup + web role
+  hosts: lab
+  gather_facts: true
+  become: true
+
+  vars:
+    web_pkg: "{{ 'httpd' if ansible_facts['os_family'] in ['RedHat','Amazon'] else 'apache2' }}"
+    web_svc: "{{ web_pkg }}"
+    web_root: "/var/www/html"
+
+  tasks:
+    - name: Ensure basic packages are present
+      package:
+        name: [git, curl]
+        state: present
+
+    - name: Install web server (only for web role)
+      when: "'web' in (hostvars[inventory_hostname].get('role',''))"
+      package:
+        name: "{{ web_pkg }}"
+        state: present
+
+    - name: Ensure web service is running
+      when: "'web' in (hostvars[inventory_hostname].get('role',''))"
+      service:
+        name: "{{ web_svc }}"
+        state: started
+        enabled: true
+
+    - name: Create test page
+      when: "'web' in (hostvars[inventory_hostname].get('role',''))"
+      copy:
+        dest: "{{ web_root }}/index.html"
+        content: "Hello from {{ inventory_hostname }} ({{ ansible_default_ipv4.address }})\n"
+        mode: "0644"
