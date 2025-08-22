@@ -25,7 +25,7 @@ resource "aws_instance" "bastion" {
   subnet_id                   = aws_subnet.bastion.id
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   key_name                    = aws_key_pair.core.key_name
-  associate_public_ip_address = var.create_igw
+  associate_public_ip_address = var.create_gateway
   user_data = file("user_data.sh")
   tags = merge(var.tags, { Name = "scep-core-bastion" })
 }

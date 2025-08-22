@@ -6,7 +6,7 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_internet_gateway" "igw" {
-  count  = var.create_igw ? 1 : 0
+  count  = var.create_gateway ? 1 : 0
   vpc_id = aws_vpc.main.id
   tags   = merge(var.tags, { Name = "scep-core-igw" })
 }
@@ -14,7 +14,7 @@ resource "aws_internet_gateway" "igw" {
 resource "aws_subnet" "bastion" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.bastion_subnet_cidr
-  map_public_ip_on_launch = var.create_igw
+  map_public_ip_on_launch = var.create_gateway
   tags = merge(var.tags, { Name = "scep-core-bastion-subnet" })
 }
 
@@ -24,7 +24,7 @@ resource "aws_route_table" "bastion" {
 }
 
 resource "aws_route" "bastion_default" {
-  count                  = var.create_igw ? 1 : 0
+  count                  = var.create_gateway ? 1 : 0
   route_table_id         = aws_route_table.bastion.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.igw[0].id
@@ -41,13 +41,13 @@ resource "aws_security_group" "bastion_sg" {
   vpc_id      = aws_vpc.main.id
 
   dynamic "ingress" {
-    for_each = var.create_igw ? [1] : []
+    for_each = var.create_gateway ? [1] : []
     content {
       description = "SSH from your IP"
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
-      cidr_blocks = [var.your_ip_cidr]
+      cidr_blocks = [var.Ip_cidr]
     }
   }
   ingress {

@@ -8,9 +8,9 @@ variable "bastion_subnet_cidr" {
   default = "10.40.10.0/24"
 }
 
-variable "your_ip_cidr" {
+variable "Ip_cidr" {
   type    = string
-  default = "91.170.39.139/32" # remplace par TON IP/32
+  default = "91.170.39.139/32"
 }
 
 variable "instance_type" {
@@ -18,7 +18,7 @@ variable "instance_type" {
   default = "t3.micro"
 }
 
-variable "create_igw" {
+variable "create_gateway" {
   type    = bool
   default = true
 }
