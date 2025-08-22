@@ -27,5 +27,5 @@ resource "aws_instance" "bastion" {
   key_name                    = aws_key_pair.core.key_name
   associate_public_ip_address = var.create_gateway
   user_data = file("user_data.sh")
-  tags = merge(var.tags, { Name = "scep-core-bastion" })
+  tags = merge(var.tags, { Name = "scep-bastion" })
 }

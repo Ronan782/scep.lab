@@ -2,25 +2,25 @@ resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
-  tags = merge(var.tags, { Name = "scep-core-vpc" })
+  tags = merge(var.tags, { Name = "scep-vpc" })
 }
 
 resource "aws_internet_gateway" "gateway" {
   count  = var.create_gateway ? 1 : 0
   vpc_id = aws_vpc.main.id
-  tags   = merge(var.tags, { Name = "scep-core-gateway" })
+  tags   = merge(var.tags, { Name = "scep-gateway" })
 }
 
 resource "aws_subnet" "bastion" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.bastion_subnet_cidr
   map_public_ip_on_launch = var.create_gateway
-  tags = merge(var.tags, { Name = "scep-core-bastion-subnet" })
+  tags = merge(var.tags, { Name = "scep-bastion-subnet" })
 }
 
 resource "aws_route_table" "bastion" {
   vpc_id = aws_vpc.main.id
-  tags   = merge(var.tags, { Name = "scep-core-rt-bastion" })
+  tags   = merge(var.tags, { Name = "scep-rt-bastion" })
 }
 
 resource "aws_route" "bastion_default" {
@@ -36,7 +36,7 @@ resource "aws_route_table_association" "bastion" {
 }
 
 resource "aws_security_group" "bastion_sg" {
-  name        = "scep-core-bastion-sg"
+  name        = "scep-bastion-sg"
   description = "SSH vers bastion"
   vpc_id      = aws_vpc.main.id
 
@@ -70,5 +70,5 @@ resource "aws_security_group" "bastion_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = merge(var.tags, { Name = "scep-core-bastion" })
+  tags = merge(var.tags, { Name = "scep-bastion" })
 }
