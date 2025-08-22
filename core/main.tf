@@ -26,23 +26,6 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
   key_name                    = aws_key_pair.core.key_name
   associate_public_ip_address = var.create_igw
-  user_data = <<-EOF
-#!/bin/bash
-set -euxo pipefail
-
-# Amazon Linux 2
-yum -y install squid
-
-# Définir ACL "vpc" et autoriser avant le deny all
-# (on insère proprement avant 'http_access deny all')
-if ! grep -q '^acl vpc ' /etc/squid/squid.conf; then
-  sed -i '1i acl vpc src ${var.vpc_cidr}' /etc/squid/squid.conf
-fi
-if ! grep -q '^http_access allow vpc' /etc/squid/squid.conf; then
-  sed -i '/^http_access deny all/i http_access allow vpc' /etc/squid/squid.conf
-fi
-
-systemctl enable --now squid
-EOF
+  user_data = "${file("user_data.sh")}"
   tags = merge(var.tags, { Name = "scep-core-bastion" })
 }
