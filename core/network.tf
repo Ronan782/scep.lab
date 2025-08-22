@@ -8,7 +8,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "gateway" {
   count  = var.create_gateway ? 1 : 0
   vpc_id = aws_vpc.main.id
-  tags   = merge(var.tags, { Name = "scep-core-igw" })
+  tags   = merge(var.tags, { Name = "scep-core-gateway" })
 }
 
 resource "aws_subnet" "bastion" {
