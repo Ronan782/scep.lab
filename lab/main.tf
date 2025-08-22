@@ -13,10 +13,6 @@ locals {
 
 data "aws_ssm_parameter" "selected_ami" { name = local.ami_param }
 
-locals {
-  user_data = file("install_python.sh")
-}
-
 resource "aws_instance" "lab" {
   count                       = var.instance_count
   ami                         = data.aws_ssm_parameter.selected_ami.value
@@ -25,6 +21,6 @@ resource "aws_instance" "lab" {
   vpc_security_group_ids      = [aws_security_group.lab_sg.id]
   key_name                    = var.key_name
   associate_public_ip_address = false
-  user_data                   = local.user_data
+  user_data                   = file("install_python.sh")
   tags = merge(var.tags, { Name = "${var.lab_name}-${format("%02d", count.index+1)}", role = var.instance_type })
 }
