@@ -13,7 +13,7 @@ locals {
 data "aws_ssm_parameter" "selected_ami" { name = local.ami_param }
 
 locals {
-  user_data = "${file("install_python.sh")}"
+  user_data = file("install_python.sh")
 }
 
 resource "aws_instance" "lab" {
